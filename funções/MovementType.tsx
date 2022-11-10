@@ -290,5 +290,69 @@ export default function MovementType(piece, move, board) {
      
     }
   }
+  else if (piece.type === "King") {
+    for(let i=piece.x-1; i<=piece.x+1; i++){
+      let k1 = undefined;
+      board.filter((post) => {
+        if (post.y === piece.y-1 && post.x === i) {
+          if (post.color === piece.color) {
+            k1=1;
+          }
+          
+        }
+      });
+      if(k1===undefined){
+      movement.push({x:i, y:piece.y-1, piece:piece})
+      }
+      if(i===piece.x+1){
+        for(let z=piece.y-1; z<=piece.y+1; z++){
+          let k2 = undefined;
+          board.filter((post) => {
+            if (post.y === z && post.x === piece.x+1) {
+              if (post.color === piece.color) {
+                k2=1;
+              }
+              
+            }
+          });
+          if(k2===undefined){
+          movement.push({x:piece.x+1, y:z, piece:piece})
+          }
+          if(z===piece.y+1){
+            for(let t=piece.x+1; t>=piece.x-1; t--){
+              let k3 = undefined;
+              board.filter((post) => {
+                if (post.y === piece.y+1 && post.x === t) {
+                  if (post.color === piece.color) {
+                    k3=1;
+                  }
+                  
+                }
+              });
+              if(k3===undefined){
+              movement.push({x:t, y:piece.y+1, piece:piece})
+              }
+              if(t===piece.x-1){
+                for(let t=piece.x+1; t>=piece.x-1; t--){
+                  let k4 = undefined;
+                  board.filter((post) => {
+                    if (post.y === piece.y && post.x === piece.x-1) {
+                      if (post.color === piece.color) {
+                        k4=1;
+                      }
+                      
+                    }
+                  });
+                  if(k4===undefined){
+                movement.push({x:piece.x-1, y:piece.y, piece:piece})
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   return movement;
 }
