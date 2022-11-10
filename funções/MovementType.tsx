@@ -200,8 +200,95 @@ export default function MovementType(piece, move, board) {
     movement.push({x:piece.x+2, y:piece.y+1, piece:piece})
     }
   }
-  else if (piece.type === "Bioshop") {
-
+  else if (piece.type === "Bishop") {
+    let y1=piece.y
+    for(let i=piece.x+1; i<8 && i>=0; i++){
+      y1--;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y1 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y1, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
+    let y2=piece.y
+    for(let i=piece.x-1; i<8 && i>=0; i--){
+      y2--;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y2 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y2, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
+    let y3=piece.y
+    for(let i=piece.x+1; i<8 && i>=0; i++){
+      y3++;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y3 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y3, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
+    let y4=piece.y
+    for(let i=piece.x-1; i<8 && i>=0; i--){
+      y4++;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y4 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y4, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
   }
   return movement;
 }

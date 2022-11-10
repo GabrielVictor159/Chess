@@ -30,10 +30,10 @@ export default function InitialPieces(){
         { image: require("../assets/Pieces/Pawn_white.png"), x: 7, y: 6, color:'w', type:'Pawn' },
         { image: require("../assets/Pieces/Tower_white.png"), x: 0, y: 7, color:'w', type:'Tower' },
         { image: require("../assets/Pieces/Horse_white.png"), x: 1, y: 7, color:'w', type:'Horse' },
-        { image: require("../assets/Pieces/Bishop_white.png"), x: 2, y: 7, color:'w', type:'Bioshop' },
+        { image: require("../assets/Pieces/Bishop_white.png"), x: 2, y: 7, color:'w', type:'Bishop' },
         { image: require("../assets/Pieces/Queen_white.png"), x: 3, y: 7, color:'w', type:'Queen' },
         { image: require("../assets/Pieces/King_white.png"), x: 4, y: 7, color:'w' , type:'King' },
-        { image: require("../assets/Pieces/Bishop_white.png"), x: 5, y: 7, color:'w' , type:'Bioshop' },
+        { image: require("../assets/Pieces/Bishop_white.png"), x: 5, y: 7, color:'w' , type:'Bishop' },
         { image: require("../assets/Pieces/Horse_white.png"), x: 6, y: 7, color:'w' , type:'Horse' },
         { image: require("../assets/Pieces/Tower_white.png"), x: 7, y: 7, color:'w' , type:'Tower' }
     )
