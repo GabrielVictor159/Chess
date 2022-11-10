@@ -354,5 +354,238 @@ export default function MovementType(piece, move, board) {
       }
     }
   }
+  else if (piece.type === "Queen") {
+     let z = 0;
+    for (let i = piece.y - 1; i < 8 && i >= 0; i--) {
+      let p = 0;
+      let igual = 0;
+      let l = board.filter((post) => {
+        if (post.x === piece.x && post.y === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+          return post;
+        }
+      });
+      if (igual === 0) {
+        movement.push({ x: piece.x, y: i, piece: piece });
+        z++;
+      }
+      if (p != 0) {
+        break;
+      }
+    }
+    for (let i = piece.y + 1; i < 8 && i >= 0; i++) {
+      let p = 0;
+      let igual = 0;
+      let l = board.filter((post) => {
+        if (post.x === piece.x && post.y === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+          return post;
+        }
+      });
+
+      if (igual === 0) {
+        movement.push({ x: piece.x, y: i, piece: piece });
+        z++;
+      } else if (p != 0) {
+        break;
+      }
+    }
+    for (let x = piece.x - 1; x >= 0 && x < 8; x--) {
+      let p = 0;
+      let igual = 0;
+      let l = board.filter((post) => {
+        if (post.y === piece.y && post.x === x) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+          return post;
+        }
+      });
+      if (igual == 0) {
+        movement.push({ x: x, y: piece.y, piece: piece });
+        z++;
+      }
+      if (p != 0) {
+        break;
+      }
+    }
+    for (let x = piece.x + 1; x >= 0 && x < 8; x++) {
+      let p = 0;
+      let igual = 0;
+      let l = board.filter((post) => {
+        if (post.y === piece.y && post.x === x) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+          return post;
+        }
+      });
+      if (igual === 0) {
+        movement.push({ x: x, y: piece.y, piece: piece });
+        z++;
+      }
+      if (p != 0) {
+        break;
+      }
+    }
+    let y1=piece.y
+    for(let i=piece.x+1; i<8 && i>=0; i++){
+      y1--;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y1 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y1, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
+    let y2=piece.y
+    for(let i=piece.x-1; i<8 && i>=0; i--){
+      y2--;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y2 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y2, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
+    let y3=piece.y
+    for(let i=piece.x+1; i<8 && i>=0; i++){
+      y3++;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y3 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y3, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
+    let y4=piece.y
+    for(let i=piece.x-1; i<8 && i>=0; i--){
+      y4++;
+      let p=0;
+      let igual =0
+      board.filter((post) => {
+        if (post.y === y4 && post.x === i) {
+          if (post.color === piece.color) {
+            igual++;
+          }
+          p++;
+        }
+      });
+     if(igual===0){
+      movement.push({x:i, y:y4, piece:piece})
+     
+     }
+     if(p!==0){
+      break;
+     }
+     
+    }
+    for(let i=piece.x-1; i<=piece.x+1; i++){
+      let k1 = undefined;
+      board.filter((post) => {
+        if (post.y === piece.y-1 && post.x === i) {
+          if (post.color === piece.color) {
+            k1=1;
+          }
+          
+        }
+      });
+      if(k1===undefined){
+      movement.push({x:i, y:piece.y-1, piece:piece})
+      }
+      if(i===piece.x+1){
+        for(let z=piece.y-1; z<=piece.y+1; z++){
+          let k2 = undefined;
+          board.filter((post) => {
+            if (post.y === z && post.x === piece.x+1) {
+              if (post.color === piece.color) {
+                k2=1;
+              }
+              
+            }
+          });
+          if(k2===undefined){
+          movement.push({x:piece.x+1, y:z, piece:piece})
+          }
+          if(z===piece.y+1){
+            for(let t=piece.x+1; t>=piece.x-1; t--){
+              let k3 = undefined;
+              board.filter((post) => {
+                if (post.y === piece.y+1 && post.x === t) {
+                  if (post.color === piece.color) {
+                    k3=1;
+                  }
+                  
+                }
+              });
+              if(k3===undefined){
+              movement.push({x:t, y:piece.y+1, piece:piece})
+              }
+              if(t===piece.x-1){
+                for(let t=piece.x+1; t>=piece.x-1; t--){
+                  let k4 = undefined;
+                  board.filter((post) => {
+                    if (post.y === piece.y && post.x === piece.x-1) {
+                      if (post.color === piece.color) {
+                        k4=1;
+                      }
+                      
+                    }
+                  });
+                  if(k4===undefined){
+                movement.push({x:piece.x-1, y:piece.y, piece:piece})
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   return movement;
 }
