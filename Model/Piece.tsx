@@ -1,7 +1,7 @@
 export default interface Piece{
-    image: string;
+    image?: string;
   x: number;
   y: number;
-  color: string;
-  type:string;
+  color?: string;
+  type?:string;
 }
