@@ -1,5 +1,8 @@
 import React from "react";
 import Movement from "../Model/Movement";
+import MovementAction from "./MovementAction";
+
+
 
 export default function MovementType(piece, board) {
   let movement: Movement[] = [];

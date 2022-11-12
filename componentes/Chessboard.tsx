@@ -15,6 +15,8 @@ import Movement from "../Model/Movement";
 import Check from "../Controller/Check";
 import MovementAction from "../Controller/MovementAction";
 import Images from "../Model/Images";
+import CheckMatte from "../Controller/CheckMatte";
+import MovementFylter from "../Controller/MovementFylter";
 export default function Chessboard() {
   const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8];
   const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -23,11 +25,28 @@ export default function Chessboard() {
   const [blackPeriod, setBlackPeriod] = useState(false);
   const [movement, setMovement] = useState<Movement[]>([]);
   const [pawnTransition, setPawnTransition] = useState<Piece>();
-
+  useEffect(()=>{
+    if(Check('w',pieces)){
+      if(CheckMatte('w',pieces)){
+        alert('CHECKMATTE BRANCO')
+      }
+      else{
+        alert('Check branco')
+      }
+    }
+    if(Check('b', pieces)){
+      if(CheckMatte('b',pieces)){
+        alert('CHECKMATTE PRETO')
+      }
+      else{
+        alert('Check preto')
+      }
+    }
+  })
   function mov(movement) {
     let movimento = MovementAction(movement, pieces);
-    
-    let pawnTransitionIndex = movimento.findIndex(
+    let t = movimento===false?pieces:movimento
+    let pawnTransitionIndex = t.findIndex(
       (value) =>
         (value.y === 7 && value.type === "Pawn" && value.color === "b") ||
         (value.y === 0 && value.type === "Pawn" && value.color === "w")
@@ -38,7 +57,7 @@ export default function Chessboard() {
       setPawnTransition(movimento[pawnTransitionIndex]);
     } 
     else if(movimento === pieces){
-      
+    
     }
     else {
       if (movement.piece.color === "w") {
@@ -49,13 +68,13 @@ export default function Chessboard() {
         setWhitePeriod(true);
       }
     }
-    setPieces(movimento);
+    setPieces(t);
     setMovement([]);
   }
   function clickPiece(Callback) {
     let o = MovementType(Callback, pieces);
-
-    setMovement(o);
+    let v = MovementFylter(o,pieces)
+    setMovement(v);
   }
   function alterPawn(selectPawnType) {
     let pieceIndex = pieces.findIndex(

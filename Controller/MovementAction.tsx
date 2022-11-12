@@ -25,8 +25,7 @@ export default function MovementAction(movement, board){
       return(Cal)
     }
     else{
-      alert('check')
-        return(board)
+        return(false)
     }
   }
   else{
@@ -35,8 +34,7 @@ export default function MovementAction(movement, board){
       return(Cal)
     }
     else{
-      alert('check')
-        return(board)
+        return(false)
     }
   }
 }
