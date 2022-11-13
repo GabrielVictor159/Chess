@@ -7,7 +7,6 @@ import {
   Image,
 } from "react-native";
 import Tile from "./Tile";
-import Animated, { Value } from "react-native-reanimated";
 import MovementType from "../Controller/MovementType";
 import InitialPieces from "../Controller/InitialPieces";
 import Piece from "../Model/Piece";
@@ -18,6 +17,10 @@ import Images from "../Model/Images";
 import CheckMatte from "../Controller/CheckMatte";
 import MovementFylter from "../Controller/MovementFylter";
 import randomMove from "../Controller/IA/randomMove";
+
+
+
+
 export default function Chessboard() {
   const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8];
   const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -31,12 +34,19 @@ export default function Chessboard() {
 
 
   useEffect(()=>{
-    if(blackPeriod === true){
-      moveBlack()
+    if(blackPeriod === true && (CheckMatte('b', pieces)!==true)){
+      try{
+        moveBlack()
+      }
+      catch{
+        alert('CHECKMATTE PRETO')
+      }
     }
     if(Check('w',pieces)){
       if(CheckMatte('w',pieces)){
         alert('CHECKMATTE BRANCO')
+        setBlackPeriod(false)
+        setWhitePeriod(false)
       }
       else{
         alert('Check branco')
@@ -44,6 +54,8 @@ export default function Chessboard() {
     }
     if(Check('b', pieces)){
       if(CheckMatte('b',pieces)){
+        setBlackPeriod(false)
+        setWhitePeriod(false)
         alert('CHECKMATTE PRETO')
       }
       else{
@@ -51,16 +63,18 @@ export default function Chessboard() {
       }
     }
   })
+
+
   function moveBlack(){
     let loop = true
     let newBoard;
-    while(loop){
       newBoard = randomMove('b', pieces)
       if(newBoard!=false){
-        break;
+        setPieces(newBoard)
+        
       }
-    }
-    setPieces(newBoard)
+    
+    
     setBlackPeriod(false)
     setWhitePeriod(true)
   }
