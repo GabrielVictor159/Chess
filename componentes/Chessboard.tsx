@@ -17,6 +17,7 @@ import MovementAction from "../Controller/MovementAction";
 import Images from "../Model/Images";
 import CheckMatte from "../Controller/CheckMatte";
 import MovementFylter from "../Controller/MovementFylter";
+import randomMove from "../Controller/IA/randomMove";
 export default function Chessboard() {
   const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8];
   const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -25,7 +26,14 @@ export default function Chessboard() {
   const [blackPeriod, setBlackPeriod] = useState(false);
   const [movement, setMovement] = useState<Movement[]>([]);
   const [pawnTransition, setPawnTransition] = useState<Piece>();
+
+
+
+
   useEffect(()=>{
+    if(blackPeriod === true){
+      moveBlack()
+    }
     if(Check('w',pieces)){
       if(CheckMatte('w',pieces)){
         alert('CHECKMATTE BRANCO')
@@ -43,6 +51,19 @@ export default function Chessboard() {
       }
     }
   })
+  function moveBlack(){
+    let loop = true
+    let newBoard;
+    while(loop){
+      newBoard = randomMove('b', pieces)
+      if(newBoard!=false){
+        break;
+      }
+    }
+    setPieces(newBoard)
+    setBlackPeriod(false)
+    setWhitePeriod(true)
+  }
   function mov(movement) {
     let movimento = MovementAction(movement, pieces);
     let t = movimento===false?pieces:movimento
@@ -138,8 +159,7 @@ export default function Chessboard() {
           }
         });
         if (
-          (color === "w" && whitePeriod === true) ||
-          (color === "b" && blackPeriod === true)
+          (color === "w" && whitePeriod === true) 
         ) {
           border.push(
             <TouchableHighlight
