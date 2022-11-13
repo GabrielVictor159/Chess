@@ -17,11 +17,10 @@ import Images from "../Model/Images";
 import CheckMatte from "../Controller/CheckMatte";
 import MovementFylter from "../Controller/MovementFylter";
 import randomMove from "../Controller/IA/randomMove";
+import moveBasedRelativeStrength from "../Controller/IA/moveBasedRelativeStrength";
+import miniMax from "../Controller/IA/miniMax";
 
-
-
-
-export default function Chessboard() {
+export default function Chessboard(props) {
   const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8];
   const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const [pieces, setPieces] = useState<Piece[]>(InitialPieces());
@@ -29,58 +28,64 @@ export default function Chessboard() {
   const [blackPeriod, setBlackPeriod] = useState(false);
   const [movement, setMovement] = useState<Movement[]>([]);
   const [pawnTransition, setPawnTransition] = useState<Piece>();
-
-
-
-
+  const [gameOver, setGameOver] = useState(false)
+  const [checkMatteBlack, setCheckMatteBlack] = useState(false)
+  const [checkMatteWhite, setCheckMatteWhite] = useState(false)
   useEffect(()=>{
-    if(blackPeriod === true && (CheckMatte('b', pieces)!==true)){
-      try{
-        moveBlack()
-      }
-      catch{
-        alert('CHECKMATTE PRETO')
-      }
-    }
-    if(Check('w',pieces)){
-      if(CheckMatte('w',pieces)){
-        alert('CHECKMATTE BRANCO')
+    setInterval(()=>{
+      
+      setTimeout(() => {
+        setBlackPeriod(!blackPeriod)
+      }, props.dificulty==='medium'|| props.dificulty==='easy'?1000:200);
+      setWhitePeriod(!whitePeriod)
+      setMovement([])
+    },30000)
+  },[])
+  useEffect(() => {
+    if (blackPeriod === true && CheckMatte("b", pieces) !== true) {
+      try {
+        moveBlack();
+      } catch {
+        setGameOver(true)
+        setCheckMatteBlack(true)
         setBlackPeriod(false)
         setWhitePeriod(false)
       }
-      else{
-        alert('Check branco')
-      }
     }
-    if(Check('b', pieces)){
-      if(CheckMatte('b',pieces)){
-        setBlackPeriod(false)
-        setWhitePeriod(false)
-        alert('CHECKMATTE PRETO')
-      }
-      else{
-        alert('Check preto')
-      }
+    if (Check("w", pieces)) {
+      if (CheckMatte("w", pieces)) {
+        setGameOver(true)
+        setCheckMatteWhite(true);
+        setBlackPeriod(false);
+        setWhitePeriod(false);
+      } 
     }
-  })
+    
+   
+  });
 
-
-  function moveBlack(){
-    let loop = true
+  function moveBlack() {
+    let loop = true;
     let newBoard;
-      newBoard = randomMove('b', pieces)
-      if(newBoard!=false){
-        setPieces(newBoard)
-        
-      }
-    
-    
-    setBlackPeriod(false)
-    setWhitePeriod(true)
+    if(props.dificulty==='easy'){
+      newBoard = randomMove('b',pieces)
+    }
+    else if(props.dificulty==='medium'){
+      newBoard = moveBasedRelativeStrength('b',pieces)
+    }
+    else{
+    newBoard = miniMax("b", "w", pieces);
+    }
+    if (newBoard != false) {
+      setPieces(newBoard);
+    }
+
+    setBlackPeriod(false);
+    setWhitePeriod(true);
   }
   function mov(movement) {
     let movimento = MovementAction(movement, pieces);
-    let t = movimento===false?pieces:movimento
+    let t = movimento === false ? pieces : movimento;
     let pawnTransitionIndex = t.findIndex(
       (value) =>
         (value.y === 7 && value.type === "Pawn" && value.color === "b") ||
@@ -90,65 +95,63 @@ export default function Chessboard() {
       setWhitePeriod(false);
       setBlackPeriod(false);
       setPawnTransition(movimento[pawnTransitionIndex]);
-    } 
-    else if(movimento === pieces){
-    
-    }
-    else {
+    } else if (movimento === pieces) {
+    } else {
+      setPieces(t);
+      setMovement([]);
       if (movement.piece.color === "w") {
         setWhitePeriod(false);
-        setBlackPeriod(true);
+        setTimeout(() => {
+          setBlackPeriod(true);
+        }, props.dificulty==='medium'|| props.dificulty==='easy'?1000:200);
       } else {
         setBlackPeriod(false);
         setWhitePeriod(true);
       }
     }
-    setPieces(t);
-    setMovement([]);
   }
   function clickPiece(Callback) {
     let o = MovementType(Callback, pieces);
-    let v = MovementFylter(o,pieces)
+    let v = MovementFylter(o, pieces);
     setMovement(v);
   }
   function alterPawn(selectPawnType) {
-    let pieceIndex = pieces.findIndex(
-      (value) =>
-        value === pawnTransition
-    );
-    let z: Piece[] =[]
-     pieces.map((value,id)=>{
-      z.push(value)
-     })
+    let pieceIndex = pieces.findIndex((value) => value === pawnTransition);
+    let z: Piece[] = [];
+    pieces.map((value, id) => {
+      z.push(value);
+    });
     switch (selectPawnType) {
       case "Queen":
-      z[pieceIndex].image=z[pieceIndex].color==='w'?Images.QueenWhite:Images.QueenBlack
-      z[pieceIndex].type="Queen"
+        z[pieceIndex].image =
+          z[pieceIndex].color === "w" ? Images.QueenWhite : Images.QueenBlack;
+        z[pieceIndex].type = "Queen";
         break;
       case "Horse":
-        z[pieceIndex].image=z[pieceIndex].color==='w'?Images.HorseWhite:Images.HorseBlack
-        z[pieceIndex].type="Horse"
+        z[pieceIndex].image =
+          z[pieceIndex].color === "w" ? Images.HorseWhite : Images.HorseBlack;
+        z[pieceIndex].type = "Horse";
         break;
       case "Tower":
-        z[pieceIndex].image=z[pieceIndex].color==='w'?Images.TowerWhite:Images.TowerBlack
-        z[pieceIndex].type="Tower"
+        z[pieceIndex].image =
+          z[pieceIndex].color === "w" ? Images.TowerWhite : Images.TowerBlack;
+        z[pieceIndex].type = "Tower";
         break;
       case "Bishop":
-        z[pieceIndex].image=z[pieceIndex].color==='w'?Images.BishopWhite:Images.BishopBlack
-        z[pieceIndex].type="Bishop"
+        z[pieceIndex].image =
+          z[pieceIndex].color === "w" ? Images.BishopWhite : Images.BishopBlack;
+        z[pieceIndex].type = "Bishop";
         break;
     }
-   setPieces(z);
-   if(pawnTransition.color==='w'){
-    setBlackPeriod(true)
-    setWhitePeriod(false)
-   }
-   else{
-    setBlackPeriod(false)
-    setWhitePeriod(true)
-   }
-   setPawnTransition(undefined)
-   
+    setPieces(z);
+    if (pawnTransition.color === "w") {
+      setBlackPeriod(true);
+      setWhitePeriod(false);
+    } else {
+      setBlackPeriod(false);
+      setWhitePeriod(true);
+    }
+    setPawnTransition(undefined);
   }
   function map() {
     let index = 0;
@@ -172,9 +175,7 @@ export default function Chessboard() {
             pic = p;
           }
         });
-        if (
-          (color === "w" && whitePeriod === true) 
-        ) {
+        if (color === "w" && whitePeriod === true) {
           border.push(
             <TouchableHighlight
               key={`${i},${z}`}
@@ -319,9 +320,7 @@ export default function Chessboard() {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={()=>
-            alterPawn('Queen')
-            }
+            onPress={() => alterPawn("Queen")}
           >
             <Image
               style={{ width: "100%", height: "80%" }}
@@ -339,9 +338,7 @@ export default function Chessboard() {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={()=>
-              alterPawn('Tower')
-              }
+            onPress={() => alterPawn("Tower")}
           >
             <Image
               style={{ width: "100%", height: "80%" }}
@@ -359,9 +356,7 @@ export default function Chessboard() {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={()=>
-              alterPawn('Horse')
-              }
+            onPress={() => alterPawn("Horse")}
           >
             <Image
               style={{ width: "100%", height: "80%" }}
@@ -379,9 +374,7 @@ export default function Chessboard() {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={()=>
-              alterPawn('Bishop')
-              }
+            onPress={() => alterPawn("Bishop")}
           >
             <Image
               style={{ width: "100%", height: "80%" }}
