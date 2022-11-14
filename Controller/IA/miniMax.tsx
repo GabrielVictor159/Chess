@@ -20,18 +20,14 @@ export default function miniMax(color,enemyColor,board){
         }
     }
     if(segureAleatoryMoves.length>0){
-         console.log('movimento seguro')
       aleatoryMoviment = segureAleatoryMoves[Math.floor(Math.random() * segureAleatoryMoves.length)]
     }
     else{
      aleatoryMoviment = generateMoves[Math.floor(Math.random() * generateMoves.length)]
-     console.log('movimento aleatorio')
     }
     let newBoard = MovementAction(aleatoryMoviment,board);
-    console.log(aleatoryMoviment)
     let initialStrength = relativeStrengthCalculation(newBoard)
    
-
     if(CheckMate!=true){
        
         let mapMoves = GenerateMoves(color, board)
@@ -40,8 +36,7 @@ export default function miniMax(color,enemyColor,board){
             let mapBoard = MovementAction(mapMoves[i],board)
             let enemyAttack = moveBasedRelativeStrength('w',mapBoard)
             let newsMovement = GenerateMoves(color, enemyAttack)
-            for(let t=0; t<newsMovement.length; t++){
-            let finalMovement = MovementAction(newsMovement[t],board)
+            let finalMovement = moveBasedRelativeStrength('b',enemyAttack)
             let relativeStrength = relativeStrengthCalculation(finalMovement)
 
             if(color==='b'){
@@ -56,9 +51,8 @@ export default function miniMax(color,enemyColor,board){
                 newBoard = mapBoard
             } 
         }
-    }
+    
         }
-         
      return newBoard;
 }
 else{
