@@ -20,43 +20,43 @@ function pieceStrength(piece) {
      
     case "Tower":
       if (piece.color === "w") {
-        return +50;
+        return +150;
         break;
       } else {
-        return -50;
+        return -150;
         break;
       }
       case "Horse":
       if (piece.color === "w") {
-        return +30;
+        return +100;
         break;
       } else {
-        return -30;
+        return -100;
         break;
       }
       
       case "Bishop":
       if (piece.color === "w") {
-        return +30;
+        return +100;
         break;
       } else {
-        return -30;
+        return -100;
         break;
       }
       case "Queen":
         if (piece.color === "w") {
-          return +90;
+          return +2000;
           break;
         } else {
-          return -90;
+          return -2000;
           break;
         }
         case "King":
       if (piece.color === "w") {
-        return +900;
+        return +9000;
         break;
       } else {
-        return -900;
+        return -9000;
         break;
       } 
       

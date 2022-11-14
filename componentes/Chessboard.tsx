@@ -31,16 +31,7 @@ export default function Chessboard(props) {
   const [gameOver, setGameOver] = useState(false)
   const [checkMatteBlack, setCheckMatteBlack] = useState(false)
   const [checkMatteWhite, setCheckMatteWhite] = useState(false)
-  useEffect(()=>{
-    setInterval(()=>{
-      
-      setTimeout(() => {
-        setBlackPeriod(!blackPeriod)
-      }, props.dificulty==='medium'|| props.dificulty==='easy'?1000:200);
-      setWhitePeriod(!whitePeriod)
-      setMovement([])
-    },30000)
-  },[])
+ 
   useEffect(() => {
     if (blackPeriod === true && CheckMatte("b", pieces) !== true) {
       try {
@@ -86,15 +77,14 @@ export default function Chessboard(props) {
   function mov(movement) {
     let movimento = MovementAction(movement, pieces);
     let t = movimento === false ? pieces : movimento;
-    let pawnTransitionIndex = t.findIndex(
-      (value) =>
-        (value.y === 7 && value.type === "Pawn" && value.color === "b") ||
-        (value.y === 0 && value.type === "Pawn" && value.color === "w")
-    );
+    let pawnTransitionIndex = t.findIndex(value => (value.y === 7 && value.type === "Pawn" && value.color === "b")||
+    (value.y === 0 && value.type === "Pawn" && value.color === "w"))
     if (pawnTransitionIndex > -1) {
       setWhitePeriod(false);
       setBlackPeriod(false);
-      setPawnTransition(movimento[pawnTransitionIndex]);
+      setPieces(t);
+      setMovement([]);
+      setPawnTransition(t[pawnTransitionIndex]);
     } else if (movimento === pieces) {
     } else {
       setPieces(t);
@@ -116,42 +106,42 @@ export default function Chessboard(props) {
     setMovement(v);
   }
   function alterPawn(selectPawnType) {
-    let pieceIndex = pieces.findIndex((value) => value === pawnTransition);
-    let z: Piece[] = [];
-    pieces.map((value, id) => {
-      z.push(value);
-    });
+    let pieceIndex = pieces.findIndex(
+      (value) =>
+        value.x == pawnTransition.x && value.y == pawnTransition.y && value.type==pawnTransition.type
+    );
+    let z: Piece[] =[]
+     pieces.map((value,id)=>{
+      z.push(value)
+     })
     switch (selectPawnType) {
       case "Queen":
-        z[pieceIndex].image =
-          z[pieceIndex].color === "w" ? Images.QueenWhite : Images.QueenBlack;
-        z[pieceIndex].type = "Queen";
+      z[pieceIndex].image=z[pieceIndex].color==='w'?Images.QueenWhite:Images.QueenBlack
+      z[pieceIndex].type="Queen"
         break;
       case "Horse":
-        z[pieceIndex].image =
-          z[pieceIndex].color === "w" ? Images.HorseWhite : Images.HorseBlack;
-        z[pieceIndex].type = "Horse";
+        z[pieceIndex].image=z[pieceIndex].color==='w'?Images.HorseWhite:Images.HorseBlack
+        z[pieceIndex].type="Horse"
         break;
       case "Tower":
-        z[pieceIndex].image =
-          z[pieceIndex].color === "w" ? Images.TowerWhite : Images.TowerBlack;
-        z[pieceIndex].type = "Tower";
+        z[pieceIndex].image=z[pieceIndex].color==='w'?Images.TowerWhite:Images.TowerBlack
+        z[pieceIndex].type="Tower"
         break;
       case "Bishop":
-        z[pieceIndex].image =
-          z[pieceIndex].color === "w" ? Images.BishopWhite : Images.BishopBlack;
-        z[pieceIndex].type = "Bishop";
+        z[pieceIndex].image=z[pieceIndex].color==='w'?Images.BishopWhite:Images.BishopBlack
+        z[pieceIndex].type="Bishop"
         break;
     }
-    setPieces(z);
-    if (pawnTransition.color === "w") {
-      setBlackPeriod(true);
-      setWhitePeriod(false);
-    } else {
-      setBlackPeriod(false);
-      setWhitePeriod(true);
-    }
-    setPawnTransition(undefined);
+   setPieces(z);
+   if(pawnTransition.color==='w'){
+    setBlackPeriod(true)
+    setWhitePeriod(false)
+   }
+   else{
+    setBlackPeriod(false)
+    setWhitePeriod(true)
+   }
+   setPawnTransition(undefined)
   }
   function map() {
     let index = 0;
@@ -271,8 +261,8 @@ export default function Chessboard(props) {
         style={{
           position: "absolute",
           backgroundColor: "#2F6183",
-          width: "100%",
-          height: 400,
+          width: "90%",
+          height: 370,
         }}
       >
         <View
@@ -385,10 +375,16 @@ export default function Chessboard(props) {
               }
             />
           </TouchableOpacity>
+          
         </View>
       ) : (
         <></>
       )}
+      <View style={{backgroundColor:'#0F4C75', width:'100%', height:120, position:'absolute',top:0, alignItems:'center', justifyContent:'flex-start'}}>
+        <Text style={{top:'60%', color:'white', fontSize:20}}>
+        {props.dificulty==='easy'?'Modo Facil':props.dificulty==='Modo medium'?'Medio':'Modo Dificil'}
+        </Text>
+      </View>
     </>
   );
 }

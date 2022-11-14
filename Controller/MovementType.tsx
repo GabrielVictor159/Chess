@@ -362,7 +362,7 @@ export default function MovementType(piece, board) {
       movement.push({x:i, y:piece.y-1, piece:piece})
       }
       if(i===piece.x+1){
-        for(let z=piece.y-1; z<=piece.y+1; z++){
+        for(let z=piece.y-1; z<=piece.y+1 ; z++){
           let k2 = undefined;
           board.filter((post) => {
             if (post.y === z && post.x === piece.x+1) {
