@@ -8,7 +8,6 @@ export default function randomMove(color,board){
     let CheckMate = CheckMatte(color,board) 
     if(CheckMate!=true){
         let mapMoves = GenerateMoves(color, board)
-        console.log(mapMoves)
     let newBoard = MovementAction(mapMoves[Math.floor(Math.random() * mapMoves.length)],board)
     return newBoard;
 }

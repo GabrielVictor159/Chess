@@ -19,7 +19,7 @@ import MovementFylter from "../Controller/MovementFylter";
 import randomMove from "../Controller/IA/randomMove";
 import moveBasedRelativeStrength from "../Controller/IA/moveBasedRelativeStrength";
 import miniMax from "../Controller/IA/miniMax";
-
+import { Overlay } from "@rneui/themed";
 export default function Chessboard(props) {
   const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8];
   const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -36,12 +36,16 @@ export default function Chessboard(props) {
     if (blackPeriod === true && CheckMatte("b", pieces) !== true) {
       try {
         moveBlack();
-      } catch {
-        setGameOver(true)
-        setCheckMatteBlack(true)
-        setBlackPeriod(false)
-        setWhitePeriod(false)
+      } 
+      catch{
+
       }
+    }
+    else if(CheckMatte("b", pieces) === true){
+      setGameOver(true)
+      setCheckMatteBlack(true)
+      setBlackPeriod(false)
+      setWhitePeriod(false)
     }
     if (Check("w", pieces)) {
       if (CheckMatte("w", pieces)) {
@@ -54,7 +58,15 @@ export default function Chessboard(props) {
     
    
   });
-
+  function reset(){
+    setCheckMatteBlack(false)
+    setCheckMatteWhite(false)
+    setGameOver(false)
+    setWhitePeriod(true)
+    setBlackPeriod(false)
+    setPieces(InitialPieces())
+    setMovement([])
+  }
   function moveBlack() {
     let loop = true;
     let newBoard;
@@ -70,15 +82,19 @@ export default function Chessboard(props) {
     if (newBoard != false) {
       setPieces(newBoard);
     }
-
+    let t = newBoard === false ? pieces : newBoard;
+    let pawnTransitionIndex = t.findIndex(value => value.y === 7 && value.type === "Pawn" && value.color === "b")
+    if(pawnTransitionIndex>-1){
+      t[pawnTransitionIndex].type='Queen'
+      setPieces(t)
+    }
     setBlackPeriod(false);
     setWhitePeriod(true);
   }
   function mov(movement) {
     let movimento = MovementAction(movement, pieces);
     let t = movimento === false ? pieces : movimento;
-    let pawnTransitionIndex = t.findIndex(value => (value.y === 7 && value.type === "Pawn" && value.color === "b")||
-    (value.y === 0 && value.type === "Pawn" && value.color === "w"))
+    let pawnTransitionIndex = t.findIndex(value => value.y === 7 && value.type === "Pawn" && value.color === "b")
     if (pawnTransitionIndex > -1) {
       setWhitePeriod(false);
       setBlackPeriod(false);
@@ -385,6 +401,37 @@ export default function Chessboard(props) {
         {props.dificulty==='easy'?'Modo Facil':props.dificulty==='Modo medium'?'Medio':'Modo Dificil'}
         </Text>
       </View>
+      <Overlay isVisible={gameOver} 
+      overlayStyle={{
+        width:300,
+        height:300,
+        alignItems:'center',
+        justifyContent:'center'
+      }}
+      >
+        <Text style={{fontSize:30, textAlign:'center'}}>{checkMatteBlack?'Parabens voce ganhou':'Voce perdeu'}</Text>
+        <TouchableOpacity style={{width:60, height:60, borderRadius:15,borderWidth:1,top:30, backgroundColor:'white', elevation:10, alignItems:'center', justifyContent:'center'}}
+         onPress={()=>{
+          reset();
+         }}
+         >
+          <Image style={{width:'60%', height:'60%'}} source={require('../assets/reloadIcon.png')}/>
+         </TouchableOpacity>
+      </Overlay>
+      <View style={{width:'100%', height:'100%', position:'absolute', justifyContent:'flex-end'}}>
+      <View style={{width:'100%', height:140, backgroundColor:'#0F4C75', borderTopLeftRadius:20, borderTopRightRadius:20,  justifyContent:'center'}}>
+        <View style={{width:'100%', height:100, flexDirection:'row', alignItems:'center', justifyContent:'space-around'}}>
+         <TouchableOpacity style={{width:60, height:60, borderRadius:15, backgroundColor:'white', elevation:10, alignItems:'center', justifyContent:'center'}}
+         onPress={()=>{
+          reset();
+         }}
+         >
+          <Image style={{width:'60%', height:'60%'}} source={require('../assets/reloadIcon.png')}/>
+         </TouchableOpacity>
+        </View>
+      </View>
+      </View>
+      
     </>
   );
 }
