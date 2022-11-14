@@ -15,11 +15,18 @@ export default function moveBasedRelativeStrength(color, board){
         for(let i=0; i<mapMoves.length; i++){
             let mapBoard = MovementAction(mapMoves[i],board)
             let relativeStrength = relativeStrengthCalculation(mapBoard)
+            if(color==='b'){
             if(relativeStrength<z){
                 z = relativeStrength
                 newBoard = mapBoard
             }
-
+        }
+        else{
+            if(relativeStrength>z){
+                z = relativeStrength
+                newBoard = mapBoard
+            } 
+        }
         }
          
      return newBoard;
