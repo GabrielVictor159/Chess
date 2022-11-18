@@ -6,7 +6,7 @@ import Chessboard from './componentes/Chessboard';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Chessboard dificulty='easy'/>
+      <Chessboard dificulty='hard'/>
     </View>
   );
 }
