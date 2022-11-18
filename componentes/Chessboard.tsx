@@ -85,7 +85,8 @@ export default function Chessboard(props) {
     let t = newBoard === false ? pieces : newBoard;
     let pawnTransitionIndex = t.findIndex(value => value.y === 7 && value.type === "Pawn" && value.color === "b")
     if(pawnTransitionIndex>-1){
-      t[pawnTransitionIndex].type='Queen'
+      t[pawnTransitionIndex].type='Queen';
+      t[pawnTransitionIndex].image = Images.QueenBlack;
       setPieces(t)
     }
     setBlackPeriod(false);
