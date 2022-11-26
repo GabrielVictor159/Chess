@@ -95,7 +95,7 @@ export default function Chessboard(props) {
   function mov(movement) {
     let movimento = MovementAction(movement, pieces);
     let t = movimento === false ? pieces : movimento;
-    let pawnTransitionIndex = t.findIndex(value => value.y === 7 && value.type === "Pawn" && value.color === "b")
+    let pawnTransitionIndex = t.findIndex(value => value.y === 0 && value.type === "Pawn" && value.color === "w")
     if (pawnTransitionIndex > -1) {
       setWhitePeriod(false);
       setBlackPeriod(false);
